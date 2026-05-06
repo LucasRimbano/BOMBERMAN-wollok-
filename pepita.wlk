@@ -1,5 +1,6 @@
 import wollok.game.*
 import colisiones.*
+import huevo.*
 
 object pepita {
 
@@ -42,4 +43,8 @@ object pepita {
 		if (nueva.y() >= 0) self.irA(nueva)
 	}
 
+	method colocarHuevo() {
+		const h = new Huevo(position = position)
+		h.activar()
+	}
 }

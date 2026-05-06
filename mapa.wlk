@@ -1,5 +1,16 @@
 import wollok.game.*
 
+
+class Piso {
+	var property position
+
+	method image() = "piso1.png"
+
+	method esPared() {
+		return false
+	}
+}
+
 class BloqueIndestructible {
 	var property position
 	method image() = "indes1.png"
@@ -11,6 +22,7 @@ class BloqueIndestructible {
 class BloqueDestructible {
 	var property position
 	method image() = "dest1.png"
+
 	method esPared() {
 		return true
 	}
@@ -19,6 +31,11 @@ class BloqueDestructible {
 object nivel1 {
 
 	method agregarAlJuego() {
+		(0..12).forEach({ x =>
+			(0..10).forEach({ y =>
+				game.addVisual(new Piso(position = game.at(x, y)))
+			})
+		})
 		self.posicionesIndestructibles().forEach({ pos =>
 			game.addVisual(new BloqueIndestructible(position = pos))
 		})
