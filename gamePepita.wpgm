@@ -1,0 +1,21 @@
+import wollok.game.*
+import pepita.*
+import mapa.*
+
+
+program BomberPepita {
+	game.title("BomberPepita")
+	game.height(11)
+	game.width(13)
+	game.boardGround("piso1.png")
+
+	nivel1.agregarAlJuego()
+	game.addVisual(pepita)
+
+	keyboard.right().onPressDo({ pepita.moverDerecha() })
+	keyboard.left().onPressDo({ pepita.moverIzquierda() })
+	keyboard.up().onPressDo({ pepita.moverArriba() })
+	keyboard.down().onPressDo({ pepita.moverAbajo() })
+
+	game.start()
+}
