@@ -1,0 +1,30 @@
+import wollok.game.*
+import pepita.*
+import mapa.*
+import gato.*
+
+program BomberPepita {
+	game.title("BomberPepita")
+	game.height(11)
+	game.width(13)
+
+	nivel1.agregarAlJuego()
+	game.addVisual(pepita)
+
+	const gatos = [
+		new Gato(position = game.at(1, 1),  tipo = "cal"),
+		new Gato(position = game.at(11, 1), tipo = "nar"),
+		new Gato(position = game.at(1, 9),  tipo = "neg"),
+		new Gato(position = game.at(11, 9), tipo = "tux")
+	]
+	gatos.forEach({ g => game.addVisual(g) })
+	game.onTick(500, "movimientoGatos", { gatos.forEach({ g => g.mover() }) })
+
+	keyboard.right().onPressDo({ pepita.moverDerecha() })
+	keyboard.left().onPressDo({ pepita.moverIzquierda() })
+	keyboard.up().onPressDo({ pepita.moverArriba() })
+	keyboard.down().onPressDo({ pepita.moverAbajo() })
+	keyboard.space().onPressDo({ pepita.colocarHuevo() })
+
+	game.start()
+}

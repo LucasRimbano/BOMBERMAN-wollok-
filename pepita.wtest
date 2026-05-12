@@ -1,0 +1,95 @@
+import wollok.game.*
+import pepita.*
+import mapa.*
+import colisiones.*
+
+describe "Tests de Pepita" {
+
+	method initialize() {
+		game.clear()
+	}
+
+	method prepararTablero() {
+		game.width(13)
+		game.height(11)
+	}
+
+	method prepararPepitaInicial() {
+		self.prepararTablero()
+		pepita.position(game.at(6, 5))
+		pepita.direccion("fren")
+	}
+
+	test "Pepita comienza en la posicion inicial" {
+		assert.equals(game.at(6, 5), pepita.position())
+	}
+
+	test "Pepita se mueve a la derecha" {
+		self.prepararPepitaInicial()
+
+		pepita.moverDerecha()
+
+		assert.equals(game.at(7, 5), pepita.position())
+		assert.equals("pepder.png", pepita.image())
+	}
+
+	test "Pepita se mueve a la izquierda" {
+		self.prepararPepitaInicial()
+
+		pepita.moverIzquierda()
+
+		assert.equals(game.at(5, 5), pepita.position())
+		assert.equals("pepizq.png", pepita.image())
+	}
+
+	test "Pepita se mueve hacia arriba" {
+		self.prepararPepitaInicial()
+
+		pepita.moverArriba()
+
+		assert.equals(game.at(6, 6), pepita.position())
+		assert.equals("peptras.png", pepita.image())
+	}
+
+	test "Pepita se mueve hacia abajo" {
+		self.prepararPepitaInicial()
+
+		pepita.moverAbajo()
+
+		assert.equals(game.at(6, 4), pepita.position())
+		assert.equals("pepfren.png", pepita.image())
+	}
+
+	test "Pepita no puede moverse fuera del tablero" {
+		self.prepararTablero()
+		pepita.position(game.at(0, 0))
+		pepita.direccion("fren")
+
+		pepita.moverIzquierda()
+
+		assert.equals(game.at(0, 0), pepita.position())
+	}
+
+	test "Pepita no puede atravesar un bloque" {
+		self.prepararPepitaInicial()
+		game.addVisual(new BloqueIndestructible(position = game.at(7, 5)))
+
+		pepita.moverDerecha()
+
+		assert.equals(game.at(6, 5), pepita.position())
+	}
+
+	test "Una posicion con bloque es considerada bloqueada" {
+		self.prepararTablero()
+		const posicionBloqueada = game.at(3, 3)
+		game.addVisual(new BloqueDestructible(position = posicionBloqueada))
+
+		assert.equals(true, colisiones.hayBloqueEn(posicionBloqueada))
+	}
+
+	test "Una posicion vacia no esta bloqueada" {
+		self.prepararTablero()
+
+		assert.equals(false, colisiones.hayBloqueEn(game.at(1, 1)))
+	}
+}

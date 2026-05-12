@@ -1,0 +1,72 @@
+import wollok.game.*
+import pepita.*
+import gato.*
+
+describe "Tests de Gato" {
+
+	method initialize() {
+		game.clear()
+	}
+
+	method prepararTablero() {
+		game.width(13)
+		game.height(11)
+	}
+
+	method prepararPepitaInicial() {
+		self.prepararTablero()
+		pepita.position(game.at(6, 5))
+		pepita.direccion("fren")
+	}
+
+	test "El gato calcula su posicion hacia la derecha" {
+		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
+
+		assert.equals(game.at(6, 5), unGato.posicionEn("der"))
+	}
+
+	test "El gato calcula su posicion hacia la izquierda" {
+		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
+
+		assert.equals(game.at(4, 5), unGato.posicionEn("izq"))
+	}
+
+	test "El gato calcula su posicion hacia arriba" {
+		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
+
+		assert.equals(game.at(5, 6), unGato.posicionEn("tras"))
+	}
+
+	test "El gato calcula su posicion hacia abajo" {
+		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
+
+		assert.equals(game.at(5, 4), unGato.posicionEn("fren"))
+	}
+
+	test "El gato muestra su imagen segun tipo y direccion" {
+		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
+
+		assert.equals("calfren.png", unGato.image())
+	}
+
+	test "El gato no es pared" {
+		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
+
+		assert.equals(false, unGato.esPared())
+	}
+
+	test "El gato se identifica como gato" {
+		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
+
+		assert.equals(true, unGato.esGato())
+	}
+
+	test "El gato se mueve a una posicion valida" {
+		self.prepararPepitaInicial()
+		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
+
+		unGato.mover()
+
+		assert.equals(true, unGato.position() != game.at(5, 5))
+	}
+}

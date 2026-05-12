@@ -1,17 +1,17 @@
 import wollok.game.*
-import colisiones.*
 import huevo.*
+import colisiones.*
 
 object pepita {
 
 	var property position = game.at(6, 5)
 	var property direccion = "fren"
+	var vidas = 3
 
 	method image() = "pep" + direccion + ".png"
-	
-	method esPared() {
-		return false
-	}
+	method esPared() = false
+	method esDestructible() = false
+	method recibirDanio() { self.perderVida() }
 
 	method irA(nuevaPosicion) {
 		if (colisiones.puedeMoverA(nuevaPosicion)) {
@@ -21,30 +21,36 @@ object pepita {
 
 	method moverDerecha() {
 		direccion = "der"
-		const nueva = position.right(1)
-		if (nueva.x() < game.width()) self.irA(nueva)
+		self.irA(position.right(1))
 	}
 
 	method moverIzquierda() {
 		direccion = "izq"
-		const nueva = position.left(1)
-		if (nueva.x() >= 0) self.irA(nueva)
+		self.irA(position.left(1))
 	}
 
 	method moverArriba() {
 		direccion = "tras"
-		const nueva = position.up(1)
-		if (nueva.y() < game.height()) self.irA(nueva)
+		self.irA(position.up(1))
 	}
 
 	method moverAbajo() {
 		direccion = "fren"
-		const nueva = position.down(1)
-		if (nueva.y() >= 0) self.irA(nueva)
+		self.irA(position.down(1))
 	}
 
 	method colocarHuevo() {
 		const h = new Huevo(position = position)
 		h.activar()
 	}
+
+	method perderVida() {
+		vidas -= 1
+		position = game.at(6, 5)
+		if (vidas == 0) {
+			game.say(self, "GAME OVER")
+			game.stop()
+		}
+	}
+
 }

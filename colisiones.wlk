@@ -1,5 +1,4 @@
 import wollok.game.*
-import huevo.*
 
 object colisiones {
 

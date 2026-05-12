@@ -1,0 +1,34 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run BomberPepita",
+			"type": "shell",
+			"command": "wollok",
+			"args": [
+				"run",
+				"bomberPepita.BomberPepita",
+				"--host",
+				"127.0.0.1",
+				"--port",
+				"4205",
+				"-p",
+				"${workspaceFolder}"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Test BomberPepita",
+			"type": "shell",
+			"command": "wollok",
+			"args": [
+				"test",
+				"-p",
+				"${workspaceFolder}"
+			],
+			"group": "test",
+			"problemMatcher": []
+		}
+	]
+}
