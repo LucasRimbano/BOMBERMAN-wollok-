@@ -1,6 +1,7 @@
 import wollok.game.*
 import pepita.*
 import gato.*
+import movimientos.*
 
 describe "Tests de Gato" {
 
@@ -13,34 +14,9 @@ describe "Tests de Gato" {
 		game.height(11)
 	}
 
-	method prepararPepitaInicial() {
+	method prepararPepitaLejos() {
 		self.prepararTablero()
-		pepita.position(game.at(6, 5))
-		pepita.direccion("fren")
-	}
-
-	test "El gato calcula su posicion hacia la derecha" {
-		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
-
-		assert.equals(game.at(6, 5), unGato.posicionEn("der"))
-	}
-
-	test "El gato calcula su posicion hacia la izquierda" {
-		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
-
-		assert.equals(game.at(4, 5), unGato.posicionEn("izq"))
-	}
-
-	test "El gato calcula su posicion hacia arriba" {
-		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
-
-		assert.equals(game.at(5, 6), unGato.posicionEn("tras"))
-	}
-
-	test "El gato calcula su posicion hacia abajo" {
-		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
-
-		assert.equals(game.at(5, 4), unGato.posicionEn("fren"))
+		pepita.position(game.at(1, 1))
 	}
 
 	test "El gato muestra su imagen segun tipo y direccion" {
@@ -61,12 +37,77 @@ describe "Tests de Gato" {
 		assert.equals(true, unGato.esGato())
 	}
 
+	test "El gato ejecuta movimiento hacia la derecha" {
+		self.prepararPepitaLejos()
+		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
+
+		unGato.ejecutarMovimiento(movimientoDerecha)
+
+		assert.equals(game.at(6, 5), unGato.position())
+		assert.equals("calder.png", unGato.image())
+	}
+
+	test "El gato ejecuta movimiento hacia la izquierda" {
+		self.prepararPepitaLejos()
+		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
+
+		unGato.ejecutarMovimiento(movimientoIzquierda)
+
+		assert.equals(game.at(4, 5), unGato.position())
+		assert.equals("calizq.png", unGato.image())
+	}
+
+	test "El gato ejecuta movimiento hacia arriba" {
+		self.prepararPepitaLejos()
+		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
+
+		unGato.ejecutarMovimiento(movimientoArriba)
+
+		assert.equals(game.at(5, 6), unGato.position())
+		assert.equals("caltras.png", unGato.image())
+	}
+
+	test "El gato ejecuta movimiento hacia abajo" {
+		self.prepararPepitaLejos()
+		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
+
+		unGato.ejecutarMovimiento(movimientoAbajo)
+
+		assert.equals(game.at(5, 4), unGato.position())
+		assert.equals("calfren.png", unGato.image())
+	}
+
 	test "El gato se mueve a una posicion valida" {
-		self.prepararPepitaInicial()
+		self.prepararPepitaLejos()
 		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
 
 		unGato.mover()
 
-		assert.equals(true, unGato.position() != game.at(5, 5))
+		assert.that(unGato.position() != game.at(5, 5))
 	}
+
+	test "Un gato nuevo esta vivo" {
+		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
+
+		assert.that(unGato.estaVivo())
+	}
+
+	test "Un gato muerto no esta vivo" {
+		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
+
+		unGato.morir()
+
+		assert.notThat(unGato.estaVivo())
+	}
+
+	test "Un gato muerto no se mueve" {
+		self.prepararPepitaLejos()
+		const unGato = new Gato(position = game.at(5, 5), tipo = "cal")
+		unGato.morir()
+
+		unGato.mover()
+
+		assert.equals(game.at(5, 5), unGato.position())
+	}
+
 }

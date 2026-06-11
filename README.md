@@ -1,6 +1,6 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/hlX9xZQr)
 
-# 💣 Bomberman en Wollok
+# 💣 BomberPepita en Wollok
 (Los pepitos)
 
 ## Equipo de desarrollo
@@ -9,105 +9,124 @@
 - Lucas Rimbano
 - Ivan Iaffar
 
-## Capturas
-
- cuando tengamos el juego vamos a sacar las capturas correspondientes...
-
-Por ejemplo:
-
-- Pantalla inicial del mapa.
-- Bomberman moviéndose por el escenario.
-- Bomba colocada en el mapa.
-- Explosión de una bomba.
-- Bloques destruidos.
-- Pantalla de victoria o derrota, si corresponde.
-
 ## Reglas de Juego / Instrucciones
 
-El juego es una recreación del clásico **Bomberman**, desarrollado en **Wollok** utilizando `wollok.game`.
-
-El jugador controla a Bomberman dentro de un escenario. El objetivo principal es moverse por el mapa, colocar bombas estratégicamente, destruir obstáculos y evitar ser alcanzado por enemigos o explosiones.
+El juego es una recreación del clásico **Bomberman**, desarrollado en **Wollok** utilizando `wollok.game`. El jugador controla a **Pepita** dentro de un escenario con tres niveles. El objetivo es eliminar a todos los gatos enemigos colocando huevos bomba, sin ser alcanzado por ellos.
 
 ### Controles
-
-- Usar las teclas de dirección para mover al personaje por el mapa.
-- Usar la tecla correspondiente para colocar una bomba.
-- Evitar quedar dentro del rango de explosión.
-- Evitar el contacto con los enemigos, si los hay.
-- Destruir bloques rompibles para abrir caminos dentro del escenario.
+Con las flechas movemos a Pepita.
+Con la barra espaciadora ponemos huevos.
 
 ### Mecánicas principales
 
-- El personaje puede moverse por los espacios libres del mapa.
-- Las bombas se colocan en la posición actual del jugador.
-- Las bombas explotan luego de un tiempo determinado.
-- La explosión puede destruir bloques rompibles.
-- Los bloques indestructibles no pueden ser eliminados.
-- El jugador debe evitar las explosiones y los enemigos.
-- El juego puede tener condiciones de victoria y derrota según el avance del desarrollo.
+- Pepita puede moverse por los espacios libres del mapa.
+- Al colocar un huevo, este explota luego de un tiempo, generando una explosión en cruz con alcance de 2 celdas.
+- La explosión destruye bloques destructibles y elimina gatos que estén en su rango.
+- Los bloques indestructibles no pueden ser eliminados y bloquean la explosión.
+- Los gatos se mueven automáticamente y al contacto con Pepita le quitan una vida.
+- Pepita tiene 3 vidas. Al perder la última, aparece la pantalla de game over.
+- Al eliminar a todos los gatos del nivel se avanza al siguiente.
+- El juego tiene 3 niveles. Completar el tercero muestra la pantalla de victoria.
+
+### Pantallas
+
+- **Pantalla de inicio**: se muestra al abrir el juego y al reiniciar. Presionar **Enter** para comenzar.
+- **Pantalla de game over**: aparece al perder todas las vidas. Luego de unos segundos vuelve a la pantalla de inicio.
+- **Pantalla de victoria**: aparece al completar los 3 niveles. Luego de unos segundos vuelve a la pantalla de inicio.
+
+### Sonidos
+
+Pantalla de inicio: `pantallainicial.mp3`
+Pepita pierde una vidA: `muerte.mp3`
+Huevo explota: `explosion.mp3` 
+Se pasa de niveL: `gananivel.mp3` 
+Pantalla de game over: `gameover.mp3` 
+Pantalla de victoria: `victoria.mp3` 
 
 ### Uso de polimorfismo
 
-En el desarrollo del juego se aplica **polimorfismo** haciendo que distintos objetos entiendan los mismos mensajes, aunque cada uno responda de manera diferente según su comportamiento.
+En el desarrollo del juego se aplica **polimorfismo** haciendo que distintos objetos entiendan los mismos mensajes, aunque cada uno responda de manera diferente.
 
-Por ejemplo, distintos objetos del mapa pueden recibir el mensaje `chocarContra(personaje)`:
+Los objetos del mapa (`Piso`, `BloqueIndestructible`, `BloqueDestructible`, `Gato`, `Pepita`, `CeldaExplosion`) responden a los mensajes `esPared()`, `esGato()`, `esDestructible()` y `recibirDanio()`:
 
-- Una pared indestructible bloquea el movimiento.
-- Un bloque destructible también bloquea el movimiento, pero puede desaparecer cuando explota una bomba.
-- Un espacio libre permite que el personaje avance.
+- Un `BloqueIndestructible` no puede ser destruido ni atravesado.
+- Un `BloqueDestructible` bloquea el paso pero desaparece al recibir una explosión.
+- Un `Gato` muere al recibir daño y notifica al `nivelManager`.
+- `Pepita` pierde una vida al recibir daño.
+- Un `Piso` o `CeldaExplosion` no reacciona a ninguno de estos mensajes.
 
-También se puede aplicar polimorfismo en los movimientos. Tanto el jugador como los enemigos pueden entender mensajes relacionados con el movimiento, como `moverArriba()`, `moverAbajo()`, `moverIzquierda()` o `moverDerecha()`:
+Esto permite que la lógica de colisiones y explosiones envíe siempre el mismo mensaje sin necesidad de preguntar qué tipo de objeto es cada elemento.
 
-- El jugador se mueve según las teclas presionadas.
-- Los enemigos pueden moverse automáticamente siguiendo otra lógica.
+### Uso de listas
 
-Otro ejemplo importante aparece cuando explota una bomba. Distintos objetos pueden recibir el mensaje `recibirExplosion()`:
+Las listas se utilizan en varias partes del juego para manejar colecciones de objetos de forma uniforme:
 
-- Un bloque destructible desaparece.
-- Una pared indestructible no se ve afectada.
-- Un enemigo puede ser eliminado.
-- El jugador puede perder la partida si queda dentro del rango de explosión.
+**`gato.wlk` — direcciones válidas de movimiento**
+En `Gato.mover()`, se crea una lista literal con las cuatro direcciones posibles y se filtra con `.filter()` para quedarse solo con las que no tienen obstáculos. Luego se elige una al azar con `.anyOne()`:
+```wollok
+const validas = ["der", "izq", "tras", "fren"]
+    .filter({ dir => colisiones.puedeMoverA(self.posicionEn(dir)) })
+const dir = validas.anyOne()
+```
 
-De esta manera, el juego evita preguntar constantemente qué tipo de objeto es cada elemento. En lugar de usar muchos condicionales, se envía el mismo mensaje y cada objeto responde según su propia responsabilidad.
+**`mapa.wlk` — gestión de gatos en `nivelManager`**
+El `nivelManager` mantiene una lista `gatos` que representa los enemigos vivos del nivel actual. Se usa `.forEach()` para moverlos cada tick, `.all()` para verificar si todos murieron y avanzar de nivel, e `.isEmpty()` como guardia antes de esa verificación:
+```wollok
+gatos.forEach({ g => g.mover() })
+gatos.all({ g => !g.estaVivo() })
+```
+
+**`mapa.wlk` — posiciones de bloques en los niveles**
+Cada nivel construye listas de posiciones para colocar los bloques. `posicionesDestructibles()` devuelve una lista literal, mientras que `posicionesIndestructibles()` acumula posiciones en una lista vacía usando `.add()` dentro de iteraciones con `.forEach()`. Luego se recorren con `.forEach()` para agregar los visuales al juego.
+
+**`bomberPepita.wpgm` — creación de gatos al iniciar y al cambiar de nivel**
+Los gatos se crean como una lista literal de instancias de `Gato` y se recorren con `.forEach()` para agregarlos al juego y pasárselos al `nivelManager`:
+```wollok
+const gatos = [
+    new Gato(position = game.at(1, 1),  tipo = "cal"),
+    new Gato(position = game.at(11, 1), tipo = "nar"),
+    new Gato(position = game.at(1, 9),  tipo = "neg"),
+    new Gato(position = game.at(11, 9), tipo = "tux")
+]
+gatos.forEach({ g => game.addVisual(g) })
+```
+
+**`huevo.wlk` — celdas de la explosión**
+La clase `Explosion` mantiene una lista `celdas` donde acumula cada celda visual de la explosión con `.add()`. Al finalizar la animación, recorre esa lista con `.forEach()` para remover los visuales del tablero. También la recorre para aplicar daño a todos los objetos en esas posiciones:
+```wollok
+celdas.forEach({ c => game.removeVisual(c) })
+celdas.forEach({ c => game.getObjectsIn(c.position()).forEach({ obj => obj.recibirDanio() }) })
+```
 
 ### Elementos del juego
 
-#### Personaje principal
+#### Pepita (personaje principal)
 
-Bomberman es el personaje controlado por el jugador. Puede moverse por el mapa y colocar bombas.
+Pepita es el personaje controlado por el jugador. Se mueve por el mapa, coloca huevos bomba y tiene 3 vidas. Al perder todas las vidas termina la partida.
 
-#### Bombas
+#### Huevos y explosiones
 
-Las bombas se colocan en una posición del tablero y explotan luego de un tiempo. La explosión puede afectar al jugador, enemigos y bloques destructibles.
+Los huevos se colocan en la posición actual de Pepita y explotan luego de un tiempo. La explosión se expande en las cuatro direcciones con un alcance de 2 celdas, destruye bloques destructibles y elimina gatos.
 
 #### Bloques
 
-El mapa cuenta con distintos tipos de bloques:
+El mapa cuenta con tres tipos de bloques:
 
-- Bloques indestructibles.
-- Bloques destructibles.
-- Espacios libres por donde puede moverse el jugador.
+- **Indestructibles**: forman los bordes del mapa y columnas internas. No pueden ser destruidos ni atravesados.
+- **Destructibles**: bloques que pueden ser eliminados por una explosión.
+- **Piso**: espacios libres por donde puede moverse el jugador.
 
-#### Enemigos
+#### Gatos (enemigos)
 
-Los enemigos representan un peligro para el jugador. Dependiendo de la implementación, pueden moverse por el mapa y provocar la derrota si alcanzan al personaje.
+Los gatos se mueven automáticamente por el mapa eligiendo una dirección válida al azar en cada movimiento. Al contacto con Pepita le quitan una vida. Al recibir el daño de una explosión mueren. Cuando todos los gatos del nivel mueren, se avanza al siguiente nivel.
 
 ## Otros
 
 - Curso: Algoritmos 1
 - Facultad: Universidad Nacional de San Martín - UNSAM
 - Lenguaje: Wollok
-- Versión de Wollok: 1.0.3
 - Herramientas utilizadas:
-  - Wollok
   - Wollok Game
   - Visual Studio Code
   - Git
   - GitHub
-  
-
-## Code inicial
-
-```bash
-wollok init --project bomberman --game
-```
