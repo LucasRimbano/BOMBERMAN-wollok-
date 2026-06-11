@@ -96,3 +96,5 @@
 {"exitCode":"SIGHUP","level":"info","message":"👾 Game executed bomberPepita.BomberPepita on c:\\Users\\lucas\\OneDrive\\Desktop\\pepita\\BOMBERMAN-wollok-","timeElapsed":9439,"timestamp":"2026-06-11T15:27:29.291Z"}
 {"level":"info","message":"🚀 Program executed \u001b[3m\u001b[34mbomberPepita.BomberPepita\u001b[39m\u001b[23m on \u001b[3m\u001b[34mc:\\Users\\lucas\\OneDrive\\Desktop\\pepita\\BOMBERMAN-wollok-\u001b[39m\u001b[23m","ok":true,"timeElapsed":211,"timestamp":"2026-06-11T15:27:31.892Z"}
 {"exitCode":"SIGHUP","level":"info","message":"👾 Game executed bomberPepita.BomberPepita on c:\\Users\\lucas\\OneDrive\\Desktop\\pepita\\BOMBERMAN-wollok-","timeElapsed":59583,"timestamp":"2026-06-11T15:28:31.264Z"}
+{"level":"info","message":"🚀 Program executed \u001b[3m\u001b[34mbomberPepita.BomberPepita\u001b[39m\u001b[23m on \u001b[3m\u001b[34mc:\\Users\\lucas\\OneDrive\\Desktop\\pepita\\BOMBERMAN-wollok-\u001b[39m\u001b[23m","ok":true,"timeElapsed":237,"timestamp":"2026-06-11T15:28:32.707Z"}
+{"level":"info","message":"⌛ Building environment","timeElapsed":107,"timestamp":"2026-06-11T15:29:56.601Z"}
