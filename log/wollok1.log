@@ -73,3 +73,26 @@
 {"level":"info","message":"🚀 Program executed \u001b[3m\u001b[34mbomberPepita.BomberPepita\u001b[39m\u001b[23m on \u001b[3m\u001b[34m/Users/lucasrimbano/Documents/ALGO 1/BOMBERMAN-wollok-\u001b[39m\u001b[23m","ok":true,"timeElapsed":289,"timestamp":"2026-05-12T03:30:41.476Z"}
 {"exitCode":0,"level":"info","message":"👾 Game executed bomberPepita.BomberPepita on /Users/lucasrimbano/Documents/ALGO 1/BOMBERMAN-wollok-","timeElapsed":31633,"timestamp":"2026-05-12T03:31:12.820Z"}
 {"level":"info","message":"⌛ Building environment","timeElapsed":113,"timestamp":"2026-05-12T03:31:27.357Z"}
+{"level":"info","message":"⌛ Building environment","timeElapsed":102,"timestamp":"2026-06-11T15:24:35.001Z"}
+{"level":"info","message":"⌛ Building environment","timeElapsed":102,"timestamp":"2026-06-11T15:26:42.923Z"}
+{"level":"info","message":"🚀 Program executed \u001b[3m\u001b[34mbomberPepita.BomberPepita\u001b[39m\u001b[23m on \u001b[3m\u001b[34mc:\\Users\\lucas\\OneDrive\\Desktop\\pepita\\BOMBERMAN-wollok-\u001b[39m\u001b[23m","ok":true,"timeElapsed":222,"timestamp":"2026-06-11T15:26:46.103Z"}
+{"level":"info","message":"⌛ Building environment","timeElapsed":102,"timestamp":"2026-06-11T15:27:03.676Z"}
+{"level":"info","message":"Removing diagnostics from /c:/Users/lucas/OneDrive/Desktop/pepita/BOMBERMAN-wollok-/assets/calder copy.png","timestamp":"2026-06-11T15:27:03.782Z"}
+{"level":"info","message":"Removing diagnostics from /c:/Users/lucas/OneDrive/Desktop/pepita/BOMBERMAN-wollok-/assets/piso3 copy.png","timestamp":"2026-06-11T15:27:05.273Z"}
+{"level":"info","message":"⌛ Building environment","timeElapsed":103,"timestamp":"2026-06-11T15:27:06.043Z"}
+{"level":"info","message":"Removing diagnostics from /c:/Users/lucas/OneDrive/Desktop/pepita/BOMBERMAN-wollok-/assets/tuxder copy.png","timestamp":"2026-06-11T15:27:06.145Z"}
+{"level":"info","message":"⌛ Building environment","timeElapsed":101,"timestamp":"2026-06-11T15:27:06.817Z"}
+{"level":"info","message":"Removing diagnostics from /c:/Users/lucas/OneDrive/Desktop/pepita/BOMBERMAN-wollok-/assets/tuxfren copy.png","timestamp":"2026-06-11T15:27:06.920Z"}
+{"level":"info","message":"Removing diagnostics from /c:/Users/lucas/OneDrive/Desktop/pepita/BOMBERMAN-wollok-/assets/tuxizq copy.png","timestamp":"2026-06-11T15:27:07.633Z"}
+{"level":"info","message":"⌛ Building environment","timeElapsed":109,"timestamp":"2026-06-11T15:27:08.396Z"}
+{"level":"info","message":"Removing diagnostics from /c:/Users/lucas/OneDrive/Desktop/pepita/BOMBERMAN-wollok-/assets/tuxtras copy.png","timestamp":"2026-06-11T15:27:08.504Z"}
+{"level":"info","message":"Removing diagnostics from /c:/Users/lucas/OneDrive/Desktop/pepita/BOMBERMAN-wollok-/assets/piso1 copy.png","timestamp":"2026-06-11T15:27:09.201Z"}
+{"level":"info","message":"⌛ Building environment","timeElapsed":103,"timestamp":"2026-06-11T15:27:10.121Z"}
+{"level":"info","message":"Removing diagnostics from /c:/Users/lucas/OneDrive/Desktop/pepita/BOMBERMAN-wollok-/assets/piso2 copy.png","timestamp":"2026-06-11T15:27:10.222Z"}
+{"level":"info","message":"⌛ Building environment","timeElapsed":102,"timestamp":"2026-06-11T15:27:11.457Z"}
+{"level":"info","message":"Removing diagnostics from /c:/Users/lucas/OneDrive/Desktop/pepita/BOMBERMAN-wollok-/assets/peptras copy.png","timestamp":"2026-06-11T15:27:11.572Z"}
+{"exitCode":"SIGHUP","level":"info","message":"👾 Game executed bomberPepita.BomberPepita on c:\\Users\\lucas\\OneDrive\\Desktop\\pepita\\BOMBERMAN-wollok-","timeElapsed":33053,"timestamp":"2026-06-11T15:27:18.933Z"}
+{"level":"info","message":"🚀 Program executed \u001b[3m\u001b[34mbomberPepita.BomberPepita\u001b[39m\u001b[23m on \u001b[3m\u001b[34mc:\\Users\\lucas\\OneDrive\\Desktop\\pepita\\BOMBERMAN-wollok-\u001b[39m\u001b[23m","ok":true,"timeElapsed":226,"timestamp":"2026-06-11T15:27:20.079Z"}
+{"exitCode":"SIGHUP","level":"info","message":"👾 Game executed bomberPepita.BomberPepita on c:\\Users\\lucas\\OneDrive\\Desktop\\pepita\\BOMBERMAN-wollok-","timeElapsed":9439,"timestamp":"2026-06-11T15:27:29.291Z"}
+{"level":"info","message":"🚀 Program executed \u001b[3m\u001b[34mbomberPepita.BomberPepita\u001b[39m\u001b[23m on \u001b[3m\u001b[34mc:\\Users\\lucas\\OneDrive\\Desktop\\pepita\\BOMBERMAN-wollok-\u001b[39m\u001b[23m","ok":true,"timeElapsed":211,"timestamp":"2026-06-11T15:27:31.892Z"}
+{"exitCode":"SIGHUP","level":"info","message":"👾 Game executed bomberPepita.BomberPepita on c:\\Users\\lucas\\OneDrive\\Desktop\\pepita\\BOMBERMAN-wollok-","timeElapsed":59583,"timestamp":"2026-06-11T15:28:31.264Z"}

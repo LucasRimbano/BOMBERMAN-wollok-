@@ -1,39 +1,73 @@
 import wollok.game.*
 import colisiones.*
 import pepita.*
+import mapa.*
+import movimientos.*
+
+class ComportamientoMovimiento {
+    method mover(gato) {}
+}
+
+object movimientoGatoVivo inherits ComportamientoMovimiento {
+    override method mover(gato) {
+        const validas = gato.movimientosValidos()
+        if (!validas.isEmpty()) {
+            gato.ejecutarMovimiento(validas.anyOne())
+        }
+    }
+}
+
+object movimientoGatoMuerto inherits ComportamientoMovimiento {}
+
+class ComportamientoDanio {
+    method recibirDanio(gato) {}
+    method estaVivo() = false
+}
+
+object danioGatoVivo inherits ComportamientoDanio {
+    override method recibirDanio(gato) {
+        gato.morir()
+        game.removeVisual(gato)
+        nivelManager.gatoMurio()
+    }
+    override method estaVivo() = true
+}
+
+object danioGatoMuerto inherits ComportamientoDanio {}
 
 class Gato {
-	var property position
-	const property tipo
-	var property direccion = "fren"
-	var vivo = true
+    var property position
+    const property tipo
+    var property direccion = "fren"
+    var estadoMovimiento = movimientoGatoVivo
+    var estadoDanio = danioGatoVivo
 
-	method image() = tipo + direccion + ".png"
-	method esPared() = false
-	method esGato() = true
-	method esDestructible() = false
-	method recibirDanio() {
-		vivo = false
-		game.removeVisual(self)
-	}
+    method image() = tipo + direccion + ".png"
 
-	method mover() {
-		if (vivo) {
-			const validas = ["der", "izq", "tras", "fren"]
-				.filter({ dir => colisiones.puedeMoverA(self.posicionEn(dir)) })
-			if (!validas.isEmpty()) {
-				const dir = validas.anyOne()
-				position = self.posicionEn(dir)
-				direccion = dir
-				if (position == pepita.position()) pepita.perderVida()
-			}
-		}
-	}
+    method esPared() = false
+    method esGato() = true
+    method esDestructible() = false
 
-	method posicionEn(dir) {
-		if (dir == "der")  return position.right(1)
-		if (dir == "izq")  return position.left(1)
-		if (dir == "tras") return position.up(1)
-		return position.down(1)
-	}
+    method estaVivo() = estadoDanio.estaVivo()
+
+    method recibirDanio() { estadoDanio.recibirDanio(self) }
+
+    method mover() { estadoMovimiento.mover(self) }
+
+    method morir() {
+        estadoMovimiento = movimientoGatoMuerto
+        estadoDanio = danioGatoMuerto
+    }
+
+    method movimientosValidos() {
+        return movimientos.todos()
+            .filter({ mov => colisiones.puedeMoverA(mov.posicionDesde(position, 1)) })
+    }
+
+    method ejecutarMovimiento(mov) {
+        position = mov.posicionDesde(position, 1)
+        direccion = mov.direccion()
+        if (position == pepita.position()) pepita.perderVida()
+    }
+
 }

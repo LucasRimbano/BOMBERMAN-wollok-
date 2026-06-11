@@ -2,29 +2,187 @@ import wollok.game.*
 import pepita.*
 import mapa.*
 import gato.*
+import movimientos.*
 
 program BomberPepita {
 	game.title("BomberPepita")
 	game.height(11)
 	game.width(13)
 
-	nivel1.agregarAlJuego()
-	game.addVisual(pepita)
-
-	const gatos = [
-		new Gato(position = game.at(1, 1),  tipo = "cal"),
-		new Gato(position = game.at(11, 1), tipo = "nar"),
-		new Gato(position = game.at(1, 9),  tipo = "neg"),
-		new Gato(position = game.at(11, 9), tipo = "tux")
-	]
-	gatos.forEach({ g => game.addVisual(g) })
-	game.onTick(500, "movimientoGatos", { gatos.forEach({ g => g.mover() }) })
-
-	keyboard.right().onPressDo({ pepita.moverDerecha() })
-	keyboard.left().onPressDo({ pepita.moverIzquierda() })
-	keyboard.up().onPressDo({ pepita.moverArriba() })
-	keyboard.down().onPressDo({ pepita.moverAbajo() })
-	keyboard.space().onPressDo({ pepita.colocarHuevo() })
+	pepita.registrarCallbackPerder({ juego.mostrarGameOver() })
+	nivelManager.registrarCallbackGanar({ juego.mostrarVictoria() })
+	pantallaInicio.mostrar()
 
 	game.start()
+}
+
+object sinSonido {
+	method stop() {}
+	method play() {}
+}
+
+object pantallaInicio {
+	var frame = 1
+	var sonido = sinSonido
+	var entrando = false
+	const fondo = pantallaInicioVisual
+
+	method mostrar() {
+		frame = 1
+		sonido = sinSonido
+		entrando = false
+		game.removeTickEvent("oscilarInicio")
+		game.removeVisual(fondo)
+		fondo.frame(1)
+		game.addVisual(fondo)
+		game.onTick(500, "oscilarInicio", { self.oscilar() })
+		keyboard.enter().onPressDo({ self.entrar() })
+	}
+
+	method entrar() {
+		if (!entrando) {
+			entrando = true
+			keyboard.enter().onPressDo({})
+			game.removeTickEvent("oscilarInicio")
+			fondo.frame(2)
+			sonido = game.sound("pantallainicial.mp3")
+			sonido.play()
+			game.schedule(2000, { juego.comenzar() })
+		}
+	}
+
+	method oscilar() {
+		if (frame == 1) {
+			frame = 2
+		} else {
+			frame = 1
+		}
+		fondo.frame(frame)
+	}
+
+	method ocultar() {
+		game.removeTickEvent("oscilarInicio")
+		sonido.stop()
+		sonido = sinSonido
+		game.removeVisual(fondo)
+	}
+}
+
+object pantallaInicioVisual {
+	var property frame = 1
+	var property position = game.at(0, 0)
+
+	method image() = "inicio" + frame + ".jpg"
+}
+
+class EstadoJuego {
+	method comenzar()        {}
+	method mostrarGameOver() {}
+	method mostrarVictoria() {}
+}
+
+object estadoInicio inherits EstadoJuego {
+	override method comenzar() {
+		juego.transicionarA(estadoJugando)
+		pantallaInicio.ocultar()
+		self.iniciarNivel()
+		self.registrarCambioNivel()
+	}
+
+	method iniciarNivel() {
+		nivel1.agregarAlJuego()
+		nivelManager.iniciar(self.crearYAgregarGatos())
+		game.addVisual(pepita)
+		game.onTick(500, "movimientoGatos", { nivelManager.moverGatos() })
+		controles.registrar()
+	}
+
+	method registrarCambioNivel() {
+		nivelManager.registrarCallback({
+			nivelManager.actualizarGatos(self.crearYAgregarGatos())
+			controles.registrar()
+		})
+	}
+
+	method crearYAgregarGatos() {
+		const gatos = juego.crearGatos()
+		gatos.forEach({ g => game.addVisual(g) })
+		return gatos
+	}
+}
+
+object estadoJugando inherits EstadoJuego {
+	override method mostrarGameOver() {
+		self.terminarPartida(pantallaGameOver, "gameover.mp3", 5000)
+	}
+
+	override method mostrarVictoria() {
+		self.terminarPartida(pantallaVictoria, "victoria.mp3", 4000)
+	}
+
+	method terminarPartida(pantalla, sonido, demora) {
+		juego.transicionarA(estadoFin)
+		game.clear()
+		game.addVisual(pantalla)
+		game.sound(sonido).play()
+		game.schedule(demora, { juego.resetear() })
+	}
+}
+
+object estadoFin inherits EstadoJuego {}
+
+object pantallaGameOver {
+	var property position = game.at(0, 0)
+
+	method image() = "gameover.jpeg"
+}
+
+object pantallaVictoria {
+	var property position = game.at(0, 0)
+
+	method image() = "victoria.jpeg"
+}
+
+object juego {
+	var estado = estadoInicio
+
+	method crearGatos() {
+		return [
+			new Gato(position = game.at(1, 1),  tipo = "cal"),
+			new Gato(position = game.at(11, 1), tipo = "nar"),
+			new Gato(position = game.at(1, 9),  tipo = "neg"),
+			new Gato(position = game.at(11, 9), tipo = "tux")
+		]
+	}
+
+	method transicionarA(nuevoEstado) { estado = nuevoEstado }
+
+	method comenzar()        { estado.comenzar() }
+	method mostrarGameOver() { estado.mostrarGameOver() }
+	method mostrarVictoria() { estado.mostrarVictoria() }
+
+	method resetear() {
+		self.limpiarJuego()
+		estado = estadoInicio
+		pantallaInicio.mostrar()
+	}
+
+	method limpiarJuego() {
+		game.clear()
+		game.removeVisual(pantallaGameOver)
+		game.removeVisual(pantallaVictoria)
+		game.removeTickEvent("movimientoGatos")
+		pepita.resetear()
+		nivelManager.resetear()
+	}
+}
+
+object controles {
+	method registrar() {
+		keyboard.right().onPressDo({ pepita.mover(movimientoDerecha) })
+		keyboard.left().onPressDo({ pepita.mover(movimientoIzquierda) })
+		keyboard.up().onPressDo({ pepita.mover(movimientoArriba) })
+		keyboard.down().onPressDo({ pepita.mover(movimientoAbajo) })
+		keyboard.space().onPressDo({ pepita.colocarHuevo() })
+	}
 }
